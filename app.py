@@ -1,6 +1,6 @@
 import string
 import random
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import Flask, render_template, request
 from functools import wraps
 
@@ -56,5 +56,29 @@ def chat(chat_id):
             invite_link=invite_link)
 
 # -------------------------------- API ROUTES ----------------------------------
-
 # TODO: Create the API
+@app.route("/create", methods=["POST"])
+def create_route():
+    user_name = request.json["user_name"]
+    token = request.json["token"]
+    result = newChat(user_name, token)
+    session_id =len(chats)+1
+    chats[session_id] = result
+    return chats
+    
+@app.route("/messages", methods = ["POST"])
+def create_message_route():
+    new_message = request.json["new_message"]
+    
+    message_obj = {
+        "username": "bob",
+        "body": new_message
+    }
+
+    print(chats)
+    print()
+    chats[1]['messages'].append(message_obj)
+    print()
+    print(chats[1]['messages'])
+
+    return chats

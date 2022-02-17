@@ -2,33 +2,54 @@
 
 // TODO: If a user clicks to create a chat, create a session token for them
 // and save it. Redirect the user to /chat/<chat_id>
-function createChat() {
+window.onload = () => {
+  var create_button = document.getElementById("create_button");
 
-}
+  create_button.addEventListener("click", () => {
+    createChat();
+  });
 
-/* For auth.html */
+  function generate_sessiontoken() {
+    let alpha = "abcdefghijklmnop";
+    let token_length = 10;
+    let generated_token = "";
+    while (generated_token.length < token_length) {
+      generated_token += alpha.charAt(Math.random() * alpha.length);
+    }
+    return generated_token;
+  }
 
-// TODO: On page load, pull chat_id and magic_key out of the URL parameters
-// Send them to the auth API endpoint to get a session token
-// If the user authenticaes successfully, save the session token
-// and redirect them to /chat/<chat_id>
-function authenticate() {
-  return;
-}
+  function createChat() {
+    let user_name = localStorage.getItem("username");
+    if (!user_name) {
+      alert("You must register a user name");
+      return false;
+    }
 
-/* For chat.html */
+    let token = generate_sessiontoken();
 
-// TODO: Fetch the list of existing chat messages.
-// POST to the API when the user posts a new message.
-// Automatically poll for new messages on a regular interval.
-function postMessage() {
-  return;
-}
+    fetch("http://127.0.0.1:5000/create", {
+      method: "POST",
+      body: JSON.stringify({ user_name, token }),
+      headers: { "Content-type": "application/json; charset=UTF-8" },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        window.location.href = `http://127.0.0.1:5000/chat/${
+          Object.keys(data).length
+        }`;
+      })
+      .catch((err) => console.log(err));
+  }
 
-function getMessages() {
-  return;
-}
+  /* For auth.html */
 
-function startMessagePolling() {
-  return;
-}
+  // TODO: On page load, pull chat_id and magic_key out of the URL parameters
+  // Send them to the auth API endpoint to get a session token
+  // If the user authenticaes successfully, save the session token
+  // and redirect them to /chat/<chat_id>
+  function authenticate() {
+    return;
+  }
+};
