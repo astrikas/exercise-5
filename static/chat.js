@@ -15,29 +15,56 @@ window.onload = () => {
 
     let new_message = document.querySelector("#text_input").value;
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const pageSize = urlParams.get("pageSize");
+    //const urlParams = new URLSearchParams(window.location.search);
+    //const pageSize = urlParams.get("pageSize");
+    let url = window.location.toString().split("/");
+
+    let user_name = localStorage.getItem("username");
+    let room = url[url.length - 1];
+    console.log(typeof room);
 
     fetch("http://127.0.0.1:5000/messages", {
       method: "POST",
-      body: JSON.stringify({ new_message }),
+      body: JSON.stringify({ user_name, new_message, room }),
       headers: { "Content-type": "application/json; charset=UTF-8" },
     })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        // window.location.href = `http://127.0.0.1:5000/chat/${
-        //   Object.keys(data).length
-        // }`;
       })
       .catch((err) => console.log(err));
   }
 
-  function getMessages() {
+  function addMessagesToScreen(data) {
+    let message_box = $(".messages");
+    message_box.empty();
+    data.forEach((element) => {
+      message_box.append(`<message>
+        <author>${element.username}</author>
+        <content>${element.body}</content>
+      </message>`);
+    });
     return;
   }
 
   function startMessagePolling() {
+    console.log("polling for new messages");
+    setTimeout(startMessagePolling, 3000);
+    let user_name = localStorage.getItem("username");
+
+    fetch("http://127.0.0.1:5000/getmessages", {
+      method: "POST",
+      body: JSON.stringify({ user_name }),
+      headers: { "Content-type": "application/json; charset=UTF-8" },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        addMessagesToScreen(data);
+      })
+      .catch((err) => console.log(err));
+
     return;
   }
+  startMessagePolling();
 };
