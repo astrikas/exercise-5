@@ -49,7 +49,26 @@ window.onload = () => {
   // Send them to the auth API endpoint to get a session token
   // If the user authenticaes successfully, save the session token
   // and redirect them to /chat/<chat_id>
+
+  //see if user entering is in the list
+  //add a new user who also enters the room via magiclink
+
   function authenticate() {
+    let url = window.location.toString().split("/");
+    let user_name = localStorage.getItem("username");
+    let room = url[url.length - 1];
+    fetch("http://127.0.0.1:5000/auth", {
+      method: "POST",
+      body: JSON.stringify({ user_name, room }),
+      headers: { "Content-type": "application/json; charset=UTF-8" },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("This is the auth result");
+        console.log(data);
+      })
+      .catch((err) => console.log(err));
     return;
   }
+  authenticate();
 };

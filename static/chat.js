@@ -21,7 +21,7 @@ window.onload = () => {
 
     let user_name = localStorage.getItem("username");
     let room = url[url.length - 1];
-    console.log(typeof room);
+    //console.log(typeof room);
 
     fetch("http://127.0.0.1:5000/messages", {
       method: "POST",
@@ -48,13 +48,16 @@ window.onload = () => {
   }
 
   function startMessagePolling() {
+    let url = window.location.toString().split("/");
+    let room = url[url.length - 1];
+
     console.log("polling for new messages");
     setTimeout(startMessagePolling, 3000);
-    let user_name = localStorage.getItem("username");
+    //let user_name = localStorage.getItem("username");
 
-    fetch("http://127.0.0.1:5000/getmessages", {
+    fetch("http://127.0.0.1:5000/messagepoll", {
       method: "POST",
-      body: JSON.stringify({ user_name }),
+      body: JSON.stringify({ room }),
       headers: { "Content-type": "application/json; charset=UTF-8" },
     })
       .then((res) => res.json())
@@ -67,4 +70,23 @@ window.onload = () => {
     return;
   }
   startMessagePolling();
+
+  function authenticate() {
+    let url = window.location.toString().split("/");
+    let user_name = localStorage.getItem("username");
+    let room = url[url.length - 1];
+    fetch("http://127.0.0.1:5000/auth", {
+      method: "POST",
+      body: JSON.stringify({ user_name, room }),
+      headers: { "Content-type": "application/json; charset=UTF-8" },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("This is the auth result");
+        console.log(data);
+      })
+      .catch((err) => console.log(err));
+    return;
+  }
+  authenticate();
 };

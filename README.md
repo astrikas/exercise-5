@@ -1,3 +1,7 @@
+ALISA'S COMMENTS
+
+- I could not figure out magic links, however I wrote a portion of the applicaiton to check if the user is preauthenticated or not.
+
 # Exercise #5: Watch Party
 
 5 points
@@ -66,8 +70,8 @@ requirements) is inspired by [yap.chat](https://yap.chat/).
 One point each for:
 x-Users can enter a username at username.html and receive an auth_key to include with future requests. [1 pt]
 JSON API:
-1-REST endpoint to create a new chat that requires a valid auth_key[1 pt]
-4-REST endpoint to post messages to a chat that requires a valid auth_key[1 pt]
+x-REST endpoint to create a new chat that requires a valid auth_key[1 pt]
+x-REST endpoint to post messages to a chat that requires a valid auth_key[1 pt]
 5-REST endpoint to post messages to a chat that requires a valid auth_key [1 pt]
 ?-Sign up with Magic Links: Generate URLs that contain a chat id and a unique passphrase, such that visiting that URL lets the user join the chat. [1 pt]
 ?-Chats are private! Users that didn't create a chat or follow a magic link to join it can't see its messages or its magic link, even with their developer tools. [1 pt]
@@ -75,3 +79,5 @@ JSON API:
 2-Posting: Users can post messages without reloading the page. [1 pt]
 3-Polling for messages: The UI continuously checks for new messages and displays them as they are posted to the server. It sends a request for new messages as soon as the last request is processed, but not before. [1 pt]
 -Advanced UI Handling: Allow users to be in multiple chats in multiple tabs or windows. Support usernames and messages that contain unicode characters. [1 pt]
+
+ALISA'S COMMENTS

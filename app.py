@@ -1,3 +1,5 @@
+from concurrent.futures.process import _MAX_WINDOWS_WORKERS
+from pyexpat.errors import messages
 import string
 import random
 from datetime import datetime, timedelta
@@ -23,6 +25,7 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 #         ]
 #     }
 # }
+
 chats = {}
 
 def newChat(host, session_token):
@@ -51,7 +54,6 @@ def auth():
 
 @app.route('/chat/<int:chat_id>')
 def chat(chat_id):
-    #check for local storage or magic link, if not then render home page instead of chat.html
     invite_link = "some_cool_invite_link"
     return render_template('chat.html',
             chat_id=chat_id,
@@ -80,19 +82,24 @@ def create_message_route():
     chats[int(room)]['messages'].append(message_obj) 
     return chats
 
-@app.route("/getmessages", methods = ["POST"])
+@app.route("/auth", methods = ["POST"])
 def get_message_route():
     user_name = request.json["user_name"]
+    room = request.json["room"]
     if len(chats)==0:
         return jsonify("no chats")
     else:
-        for i in chats:
-            chat_users = chats[i]
-            # for each chat_user object - separate the key / values?
-            for k,v in chat_users['authorized_users'].items():
-                # for each value - get the username
-                # print(v['username'])
-                if v['username'] == user_name:
-                    return jsonify(chats[i]['messages'])
-                else: break
-        return jsonify("end of for loop")
+        chat_users = chats[int(room)]
+        # for each chat_user object - separate the key / values?
+        for k,v in chat_users['authorized_users'].items():
+            # for each value - get the username
+            # print(v['username'])
+            if v['username'] == user_name:
+                return jsonify("True")
+    return jsonify("False")
+
+@app.route("/messagepoll", methods = ["POST"])
+def message_poll():
+     room_number = request.json["room"]
+     messages = chats[int(room_number)]["messages"]
+     return jsonify(messages)   
