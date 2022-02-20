@@ -1,6 +1,7 @@
 ALISA'S COMMENTS
 
 - I could not figure out magic links, however I wrote a portion of the applicaiton to check if the user is preauthenticated or not.
+- I did write a few magic files to try
 
 # Exercise #5: Watch Party
 
