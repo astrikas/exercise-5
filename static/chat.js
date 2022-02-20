@@ -74,6 +74,9 @@ window.onload = () => {
   function authenticate() {
     let url = window.location.toString().split("/");
     let user_name = localStorage.getItem("username");
+    if (!user_name) {
+      window.location.href = "/";
+    }
     let room = url[url.length - 1];
     fetch("http://127.0.0.1:5000/auth", {
       method: "POST",
@@ -81,9 +84,12 @@ window.onload = () => {
       headers: { "Content-type": "application/json; charset=UTF-8" },
     })
       .then((res) => res.json())
-      .then((data) => {
+      .then((respJSON) => {
         console.log("This is the auth result");
-        console.log(data);
+        console.log(respJSON);
+        if (!respJSON.success) {
+          window.location.href = "/";
+        }
       })
       .catch((err) => console.log(err));
     return;

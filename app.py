@@ -95,8 +95,9 @@ def get_message_route():
             # for each value - get the username
             # print(v['username'])
             if v['username'] == user_name:
-                return jsonify("True")
-    return jsonify("False")
+                return jsonify({ "success": True})
+        
+        return jsonify({"success": False})
 
 @app.route("/messagepoll", methods = ["POST"])
 def message_poll():
